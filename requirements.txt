@@ -1,0 +1,9 @@
+﻿fastapi
+uvicorn[standard]
+SQLAlchemy
+psycopg2-binary
+python-dotenv
+openai
+Jinja2
+python-multipart
+twilio

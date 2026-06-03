@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <title>Owner Login</title>
+  </head>
+  <body>
+    <main>
+      <h1>Owner Login</h1>
+      <p>Enter the dashboard password to view your leads.
+         For local testing, the default password is <strong>changeme</strong>.
+         If you change it, update the `DASHBOARD_PASSWORD` value in your `.env` file.</p>
+      <p style="color: red;">{{error}}</p>
+      <form method="post" action="/login">
+        <input name="password" type="password" placeholder="Dashboard password" required />
+        <button type="submit">Sign in</button>
+      </form>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,129 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <title>Lead Dashboard</title>
+  </head>
+  <body class="bg-slate-100 text-slate-900">
+    <div class="min-h-screen">
+      <header class="bg-white border-b border-slate-200 shadow-sm">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <div>
+            <p class="text-xs uppercase tracking-[0.24em] text-slate-500">Owner dashboard</p>
+            <h1 class="text-2xl font-semibold text-slate-900">Lead Responder</h1>
+          </div>
+          <a href="/logout" class="inline-flex items-center rounded-full border border-slate-300 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100">Logout</a>
+        </div>
+      </header>
+
+      <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <section class="mb-8 grid gap-6 xl:grid-cols-3">
+          <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-500">Total Leads</p>
+            <p id="totalLeads" class="mt-4 text-4xl font-semibold text-slate-900">0</p>
+            <p class="mt-2 text-sm text-slate-500">All leads collected from the webhook.</p>
+          </article>
+          <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-500">AI Replied</p>
+            <p id="repliedLeads" class="mt-4 text-4xl font-semibold text-slate-900">0</p>
+            <p class="mt-2 text-sm text-slate-500">Leads that have been marked as replied by the workflow.</p>
+          </article>
+          <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-500">Saved Revenue</p>
+            <p id="savedRevenue" class="mt-4 text-4xl font-semibold text-slate-900">$0</p>
+            <p class="mt-2 text-sm text-slate-500">Estimated revenue preserved from quick AI follow-up.</p>
+          </article>
+        </section>
+
+        <section class="space-y-6">
+          <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h2 class="text-xl font-semibold text-slate-900">Recent Leads</h2>
+                <p class="mt-1 text-sm text-slate-500">Submit a test lead or review the latest activity below.</p>
+              </div>
+              <form id="leadForm" class="flex flex-col gap-3 sm:flex-row">
+                <input name="customer_name" placeholder="Name" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 sm:w-64" />
+                <input name="customer_phone" placeholder="Phone" required class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 sm:w-56" />
+                <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Submit Lead</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200">
+            <div class="overflow-x-auto">
+              <table class="min-w-full border-separate border-spacing-0 text-left text-sm text-slate-700">
+                <thead class="bg-slate-50 text-slate-500">
+                  <tr>
+                    <th class="px-6 py-4">Lead ID</th>
+                    <th class="px-6 py-4">Customer</th>
+                    <th class="px-6 py-4">Phone</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">Received</th>
+                  </tr>
+                </thead>
+                <tbody id="leadTable" class="bg-white"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const STATUS_MAP = {
+        Contacted: { label: 'Replied', classes: 'bg-emerald-100 text-emerald-700' },
+        New: { label: 'Pending', classes: 'bg-amber-100 text-amber-700' },
+      };
+
+      async function loadLeads() {
+        const res = await fetch('/api/leads');
+        const data = await res.json();
+        const totalLeads = data.length;
+        const repliedCount = data.filter(lead => lead.status === 'Contacted').length;
+        const savedRevenue = repliedCount * 350;
+
+        document.getElementById('totalLeads').textContent = totalLeads;
+        document.getElementById('repliedLeads').textContent = repliedCount;
+        document.getElementById('savedRevenue').textContent = `$${savedRevenue.toLocaleString()}`;
+
+        const table = document.getElementById('leadTable');
+        table.innerHTML = data.map(lead => {
+          const status = STATUS_MAP[lead.status] || STATUS_MAP.New;
+          return `
+            <tr class="border-t border-slate-200 last:border-b">
+              <td class="px-6 py-4 font-medium text-slate-900">${lead.id}</td>
+              <td class="px-6 py-4">${lead.customer_name}</td>
+              <td class="px-6 py-4">${lead.customer_phone}</td>
+              <td class="px-6 py-4">
+                <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold ${status.classes}">${status.label}</span>
+              </td>
+              <td class="px-6 py-4 text-slate-500">${new Date(lead.timestamp).toLocaleString()}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('leadForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        const form = event.target;
+        const data = {
+          customer_name: form.customer_name.value,
+          customer_phone: form.customer_phone.value,
+        };
+        await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        form.reset();
+        loadLeads();
+      });
+
+      loadLeads();
+    </script>
+  </body>
+</html>

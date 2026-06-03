@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ai-lead-responder
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: DATABASE_URL
+      - key: OPENAI_API_KEY
+      - key: TWILIO_ACCOUNT_SID
+      - key: TWILIO_AUTH_TOKEN
+      - key: TWILIO_PHONE_NUMBER
+      - key: DASHBOARD_PASSWORD
+      - key: SECRET_KEY

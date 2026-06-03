@@ -1,0 +1,7 @@
+﻿CREATE TABLE IF NOT EXISTS leads (
+  id SERIAL PRIMARY KEY,
+  customer_name TEXT NOT NULL,
+  customer_phone TEXT NOT NULL,
+  status TEXT DEFAULT 'New',
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
