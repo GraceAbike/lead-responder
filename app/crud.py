@@ -1,8 +1,45 @@
 ﻿from sqlalchemy.orm import Session
 from . import models, schemas
 import os
+import openai
 from .db import SessionLocal
 from .notifications import send_sms
+
+
+def _openai_client():
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise RuntimeError("OPENAI_API_KEY must be set in .env before calling generate_ai_response()")
+    return openai.OpenAI(api_key=api_key)
+
+
+def _build_customer_prompt(customer_message: str) -> str:
+    return (
+        "You are a professional and courteous service assistant. Reply politely to the customer request, "
+        "confirm that help can be arranged quickly, and ask for the customer's preferred appointment time. "
+        "The response should be clear, empathetic, and businesslike.\n\n"
+        f"Customer request: {customer_message}\n\n"
+        "AI response:"
+    )
+
+
+def generate_ai_response(customer_message: str) -> str:
+    client = _openai_client()
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are a highly professional customer support assistant."},
+            {"role": "user", "content": _build_customer_prompt(customer_message)},
+        ],
+        temperature=0.2,
+        max_tokens=250,
+    )
+    message = response.choices[0].message
+    if hasattr(message, "content"):
+        content = message.content
+    else:
+        content = message["content"]
+    return content.strip()
 
 
 def create_lead(db: Session, lead: schemas.LeadCreate):
