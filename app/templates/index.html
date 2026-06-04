@@ -15,25 +15,25 @@
             <p class="text-xs uppercase tracking-[0.24em] text-slate-500">Owner dashboard</p>
             <h1 class="text-2xl font-semibold text-slate-900">Lead Responder</h1>
           </div>
-          <a href="/logout" class="inline-flex items-center rounded-full border border-slate-300 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100">Logout</a>
+          <a href="/logout" class="inline-flex items-center rounded-full border border-slate-700 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-100">Logout</a>
         </div>
       </header>
 
       <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <section class="mb-8 grid gap-6 xl:grid-cols-3">
-          <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+          <article class="rounded-3xl bg-sky-50/70 p-6 shadow-sm ring-1 ring-sky-100 border border-sky-50">
             <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-500">Total Leads</p>
             <p id="totalLeads" class="mt-4 text-4xl font-semibold text-slate-900">0</p>
             <p class="mt-2 text-sm text-slate-500">All leads collected from the webhook.</p>
           </article>
-          <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+          <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 border border-slate-100">
             <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-500">AI Replied</p>
-            <p id="repliedLeads" class="mt-4 text-4xl font-semibold text-slate-900">0</p>
+            <p id="repliedLeads" class="mt-4 text-4xl font-semibold text-sky-700">0</p>
             <p class="mt-2 text-sm text-slate-500">Leads that have been marked as replied by the workflow.</p>
           </article>
-          <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+          <article class="rounded-3xl bg-emerald-50 p-6 shadow-sm ring-1 ring-emerald-100 border border-emerald-50">
             <p class="text-sm font-medium uppercase tracking-[0.24em] text-slate-500">Saved Revenue</p>
-            <p id="savedRevenue" class="mt-4 text-4xl font-semibold text-slate-900">$0</p>
+            <p id="savedRevenue" class="mt-4 text-4xl font-semibold text-emerald-600">$0</p>
             <p class="mt-2 text-sm text-slate-500">Estimated revenue preserved from quick AI follow-up.</p>
           </article>
         </section>
