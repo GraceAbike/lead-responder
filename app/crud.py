@@ -55,7 +55,11 @@ def get_leads(db: Session):
 
 
 def send_confirmation_sms(lead: models.Lead):
-    message = f"Hi {lead.customer_name}, thank you for reaching out! We received your request and will contact you shortly."
+    message = (
+        f"Hello {lead.customer_name}, thank you for reaching out to our team. "
+        "We have received your request and will contact you shortly to confirm your preferred appointment time. "
+        "If you have any urgent details, feel free to reply to this message."
+    )
     send_sms(lead.customer_phone, message)
 
 

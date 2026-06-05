@@ -3,20 +3,55 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/styles.css" />
     <title>Owner Login</title>
   </head>
-  <body>
-    <main>
-      <h1>Owner Login</h1>
-      <p>Enter the dashboard password to view your leads.
-         For local testing, the default password is <strong>changeme</strong>.
-         If you change it, update the `DASHBOARD_PASSWORD` value in your `.env` file.</p>
-      <p style="color: red;">{{error}}</p>
-      <form method="post" action="/login">
-        <input name="password" type="password" placeholder="Dashboard password" required />
-        <button type="submit">Sign in</button>
-      </form>
-    </main>
+  <body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="flex min-h-screen items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
+      <div class="w-full max-w-2xl space-y-8 rounded-3xl border border-slate-800 bg-slate-900/95 p-10 shadow-2xl shadow-slate-950/60 backdrop-blur-xl">
+        <div class="text-center">
+          <p class="text-sm uppercase tracking-[0.3em] text-sky-300/80">AI Lead Responder</p>
+          <h1 class="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">Owner Login</h1>
+          <p class="mx-auto mt-4 max-w-xl text-sm leading-7 text-slate-400 sm:text-base">
+            Secure access to your lead dashboard. Enter the password below to manage incoming requests and review AI follow-up activity.
+          </p>
+        </div>
+
+        <div class="rounded-3xl bg-slate-800 p-8 shadow-inner shadow-slate-950/20">
+          <p class="mb-6 rounded-2xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-300">
+            For local testing only: default password is <strong class="text-slate-100">changeme</strong>. Update `DASHBOARD_PASSWORD` in your `.env` for production.
+          </p>
+          <form class="space-y-6" method="post" action="/login">
+            <div>
+              <label for="password" class="block text-sm font-medium text-slate-300">Dashboard Password</label>
+              <div class="mt-2">
+                <input id="password" name="password" type="password" required class="w-full rounded-2xl border border-slate-700 bg-slate-950/90 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/30" placeholder="Enter your dashboard password" />
+              </div>
+            </div>
+
+            <button type="submit" class="inline-flex w-full items-center justify-center rounded-2xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50">
+              Sign in
+            </button>
+          </form>
+          <p class="mt-4 text-sm text-rose-400">{{error}}</p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/80 p-4 text-center">
+            <p class="text-3xl font-semibold text-sky-300">Secure</p>
+            <p class="mt-2 text-sm text-slate-400">Protected dashboard access</p>
+          </div>
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/80 p-4 text-center">
+            <p class="text-3xl font-semibold text-emerald-300">Fast</p>
+            <p class="mt-2 text-sm text-slate-400">Instant lead capture</p>
+          </div>
+          <div class="rounded-3xl border border-slate-800 bg-slate-950/80 p-4 text-center">
+            <p class="text-3xl font-semibold text-slate-100">Ready</p>
+            <p class="mt-2 text-sm text-slate-400">Professional client workflow</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
