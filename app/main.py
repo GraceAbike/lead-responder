@@ -60,6 +60,10 @@ def dashboard(request: Request):
     html = DASHBOARD_FILE.read_text(encoding="utf-8")
     return HTMLResponse(html)
 
+@app.get("/status")
+def status():
+    return {"status": "ok", "message": "AI Lead Responder is running"}
+
 @app.post("/api/leads")
 def receive_lead(lead: schemas.LeadCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     db_lead = crud.create_lead(db, lead)
