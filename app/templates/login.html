@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/styles.css" />
-    <title>Owner Login</title>
+    <title>Client Login</title>
   </head>
   <body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-slate-100">
     <div class="relative overflow-hidden">
@@ -16,34 +16,40 @@
           <div class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
               <p class="text-xs uppercase tracking-[0.4em] text-sky-300/80">AI Lead Responder</p>
-              <h1 class="mt-4 text-5xl font-semibold tracking-tight text-white sm:text-6xl">Owner login</h1>
+              <h1 class="mt-4 text-5xl font-semibold tracking-tight text-white sm:text-6xl">Client Login</h1>
               <p class="mt-4 max-w-xl text-sm leading-7 text-slate-400 sm:text-base">
                 Access your professional lead dashboard, review customer requests, and manage AI follow-up with confidence.
               </p>
             </div>
             <div class="rounded-3xl bg-slate-900/90 p-6 ring-1 ring-white/10">
-              <p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-400">Launch in minutes</p>
-              <h2 class="mt-4 text-3xl font-semibold text-white">Professional service workflow</h2>
-              <p class="mt-3 text-sm text-slate-400">Perfect for contractors, plumbers, cleaners, and local service businesses seeking faster lead response.</p>
+              <p class="text-sm font-medium uppercase tracking-[0.3em] text-slate-400">Secure Access</p>
+              <h2 class="mt-4 text-3xl font-semibold text-white">Your 14-Day Trial</h2>
+              <p class="mt-3 text-sm text-slate-400">Full access to lead management, AI responses, and SMS tracking. No credit card required.</p>
               <div class="mt-6 grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
                 <div class="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-4">
-                  <p class="font-semibold text-white">Secure access</p>
-                  <p class="mt-2">Encrypted dashboard login</p>
+                  <p class="font-semibold text-white">Instant leads</p>
+                  <p class="mt-2">Real-time customer requests</p>
                 </div>
                 <div class="rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-4">
-                  <p class="font-semibold text-white">Rapid follow-up</p>
-                  <p class="mt-2">AI-assisted customer replies</p>
+                  <p class="font-semibold text-white">Auto replies</p>
+                  <p class="mt-2">AI-powered responses</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="rounded-[2rem] border border-slate-800 bg-slate-900/90 p-8 shadow-inner shadow-slate-950/20">
-            <form class="space-y-6" method="post" action="/login">
+            <form class="space-y-6" method="post" action="/client/login">
               <div>
-                <label for="password" class="block text-sm font-medium text-slate-300">Dashboard password</label>
+                <label for="client_id" class="block text-sm font-medium text-slate-300">Client ID</label>
                 <div class="mt-3">
-                  <input id="password" name="password" type="password" required class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-5 py-4 text-base text-slate-100 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/30" placeholder="Enter password" />
+                  <input id="client_id" name="client_id" type="text" required class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-5 py-4 text-base text-slate-100 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/30" placeholder="Your client ID" />
+                </div>
+              </div>
+              <div>
+                <label for="password" class="block text-sm font-medium text-slate-300">Password</label>
+                <div class="mt-3">
+                  <input id="password" name="password" type="password" required class="w-full rounded-3xl border border-slate-700 bg-slate-950/90 px-5 py-4 text-base text-slate-100 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/30" placeholder="Your password" />
                 </div>
               </div>
               <button type="submit" class="inline-flex w-full items-center justify-center rounded-3xl bg-gradient-to-r from-sky-500 to-cyan-400 px-6 py-4 text-base font-semibold text-slate-950 shadow-lg shadow-sky-500/20 transition hover:from-sky-400 hover:to-cyan-300 focus:outline-none focus:ring-2 focus:ring-sky-500/50">
@@ -72,3 +78,4 @@
     </div>
   </body>
 </html>
+

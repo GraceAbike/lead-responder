@@ -1,7 +1,8 @@
 ﻿from sqlalchemy.orm import Session
-from . import models, schemas
+from . import models, schemas, auth
 import os
 import openai
+import uuid
 from .db import SessionLocal
 from .notifications import send_sms
 
@@ -42,15 +43,72 @@ def generate_ai_response(customer_message: str) -> str:
     return content.strip()
 
 
-def create_lead(db: Session, lead: schemas.LeadCreate):
-    db_lead = models.Lead(customer_name=lead.customer_name, customer_phone=lead.customer_phone)
+# ========== CLIENT MANAGEMENT ==========
+
+def create_client(db: Session, name: str) -> tuple:
+    """Create a new client with a unique client_id and plain-text password. Returns (client, plain_password)"""
+    client_id = str(uuid.uuid4())[:8].upper()
+    plain_password = str(uuid.uuid4())[:16]
+    password_hash = auth.hash_password(plain_password)
+    
+    db_client = models.Client(
+        client_id=client_id,
+        name=name,
+        password_hash=password_hash
+    )
+    db.add(db_client)
+    db.commit()
+    db.refresh(db_client)
+    return db_client, plain_password
+
+
+def get_client_by_id(db: Session, client_id: int) -> models.Client:
+    """Get a client by database ID."""
+    return db.query(models.Client).filter(models.Client.id == client_id).first()
+
+
+def get_client_by_client_id(db: Session, client_id: str) -> models.Client:
+    """Get a client by public client_id."""
+    return db.query(models.Client).filter(models.Client.client_id == client_id).first()
+
+
+def get_all_clients(db: Session):
+    """Get all clients (admin only)."""
+    return db.query(models.Client).order_by(models.Client.created_at.desc()).all()
+
+
+def verify_client_password(db: Session, client_id: str, password: str) -> models.Client:
+    """Verify client password and return client if valid, else None."""
+    db_client = get_client_by_client_id(db, client_id)
+    if not db_client:
+        return None
+    if auth.verify_password(password, db_client.password_hash):
+        return db_client
+    return None
+
+
+# ========== LEAD MANAGEMENT ==========
+
+def create_lead(db: Session, lead: schemas.LeadCreate, client_id: int):
+    """Create a lead for a specific client."""
+    db_lead = models.Lead(
+        client_id=client_id,
+        customer_name=lead.customer_name,
+        customer_phone=lead.customer_phone
+    )
     db.add(db_lead)
     db.commit()
     db.refresh(db_lead)
     return db_lead
 
 
-def get_leads(db: Session):
+def get_leads(db: Session, client_id: int):
+    """Get all leads for a specific client."""
+    return db.query(models.Lead).filter(models.Lead.client_id == client_id).order_by(models.Lead.timestamp.desc()).all()
+
+
+def get_all_leads(db: Session):
+    """Get all leads across all clients (admin only)."""
     return db.query(models.Lead).order_by(models.Lead.timestamp.desc()).all()
 
 
@@ -64,9 +122,10 @@ def send_confirmation_sms(lead: models.Lead):
 
 
 def mark_lead_contacted(lead_id: int):
+    """Mark a lead as contacted."""
     db = SessionLocal()
     try:
-        lead = db.get(models.Lead, lead_id)
+        lead = db.query(models.Lead).filter(models.Lead.id == lead_id).first()
         if not lead:
             return
         lead.status = "Contacted"
@@ -74,3 +133,4 @@ def mark_lead_contacted(lead_id: int):
         db.commit()
     finally:
         db.close()
+
