@@ -5,7 +5,13 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_DB = BASE_DIR.parent / "leads.db"
-DATABASE_URL = os.getenv("DATABASE_URL") or f"sqlite:///{DEFAULT_DB.as_posix()}"
+raw_database_url = os.getenv("DATABASE_URL", "").strip()
+
+# Render may receive an invalid Windows-style SQLite path from local .env uploads.
+if raw_database_url.startswith("sqlite:///C:/") or raw_database_url.startswith("sqlite:///C:\\"):
+    raw_database_url = ""
+
+DATABASE_URL = raw_database_url or f"sqlite:///{DEFAULT_DB.as_posix()}"
 engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {},

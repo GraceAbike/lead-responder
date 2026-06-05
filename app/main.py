@@ -17,7 +17,11 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 @app.on_event("startup")
 def startup():
-    db.init_db()
+    try:
+        db.init_db()
+    except Exception as exc:
+        print("Application startup failed during database initialization:", exc)
+        raise
 
 
 def get_db():
