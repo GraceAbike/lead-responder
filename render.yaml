@@ -13,3 +13,5 @@ services:
       - key: TWILIO_PHONE_NUMBER
       - key: DASHBOARD_PASSWORD
       - key: SECRET_KEY
+      - key: TRIAL_DAYS
+        value: "14"
