@@ -12,6 +12,7 @@ services:
       - key: TWILIO_AUTH_TOKEN
       - key: TWILIO_PHONE_NUMBER
       - key: DASHBOARD_PASSWORD
+      - key: ADMIN_PASSWORD
       - key: SECRET_KEY
       - key: TRIAL_DAYS
         value: "14"
